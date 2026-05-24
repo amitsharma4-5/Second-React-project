@@ -2,6 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+import ThemeToggle from './components/ThemeToggle'
+import Footer from './components/Footer'
 import './App.css'
 
 function App() {
@@ -21,13 +23,22 @@ function App() {
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            type="button"
+            className="counter"
+            onClick={() => setCount((count) => count + 1)}
+          >
+            Count is {count}
+          </button>
+          <button
+            type="button"
+            className="counter"
+            onClick={() => setCount(0)}
+          >
+            Reset
+          </button>
+        </div>
       </section>
 
       <div className="ticks"></div>
@@ -115,6 +126,8 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+      <Footer />
+      <ThemeToggle />
     </>
   )
 }
