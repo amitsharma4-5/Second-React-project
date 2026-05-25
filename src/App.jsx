@@ -4,6 +4,8 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import ThemeToggle from './components/ThemeToggle'
 import Footer from './components/Footer'
+import Navbar from './components/Navbar'
+import Badge from './components/Badge'
 import './App.css'
 
 function App() {
@@ -11,6 +13,7 @@ function App() {
 
   return (
     <>
+      <Navbar />
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
@@ -23,21 +26,14 @@ function App() {
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button
-            type="button"
-            className="counter"
-            onClick={() => setCount((count) => count + 1)}
-          >
-            Count is {count}
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <button type="button" className="counter" onClick={() => setCount(c => c - 5)}>-5</button>
+          <button type="button" className="counter" onClick={() => setCount(c => c - 1)}>-1</button>
+          <button type="button" className="counter" onClick={() => setCount(c => c + 1)}>
+            Count is {count} <Badge count={count} />
           </button>
-          <button
-            type="button"
-            className="counter"
-            onClick={() => setCount(0)}
-          >
-            Reset
-          </button>
+          <button type="button" className="counter" onClick={() => setCount(c => c + 5)}>+5</button>
+          <button type="button" className="counter" onClick={() => setCount(0)}>Reset</button>
         </div>
       </section>
 
