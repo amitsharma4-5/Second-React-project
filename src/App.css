@@ -1,15 +1,20 @@
 .counter {
   font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
+  padding: 5px 14px;
+  border-radius: 8px;
   color: var(--accent);
   background: var(--accent-bg);
   border: 2px solid transparent;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, transform 0.15s;
   margin-bottom: 24px;
+  cursor: pointer;
 
   &:hover {
     border-color: var(--accent-border);
+    transform: translateY(-2px);
+  }
+  &:active {
+    transform: translateY(0);
   }
   &:focus-visible {
     outline: 2px solid var(--accent);
