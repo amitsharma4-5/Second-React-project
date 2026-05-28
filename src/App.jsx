@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
@@ -8,10 +9,20 @@ import Navbar from './components/Navbar'
 import Badge from './components/Badge'
 import ProgressBar from './components/ProgressBar'
 import ScrollToTop from './components/ScrollToTop'
+import Toast from './components/Toast'
+import CounterHistory from './components/CounterHistory'
 import './App.css'
 
 function App() {
   const [count, setCount] = useLocalStorage('click-count', 0)
+  const [history, setHistory] = useState([])
+  const [toast, setToast] = useState(null)
+
+  const updateCount = (delta) => {
+    setCount(c => c + delta)
+    setHistory(h => [...h, delta])
+    setToast(delta === 0 ? 'Counter reset!' : `${delta > 0 ? '+' : ''}${delta}`)
+  }
 
   return (
     <>
@@ -29,14 +40,15 @@ function App() {
           </p>
         </div>
         <ProgressBar count={count} max={100} />
+        <CounterHistory history={history} />
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <button type="button" className="counter" onClick={() => setCount(c => c - 5)}>-5</button>
-          <button type="button" className="counter" onClick={() => setCount(c => c - 1)}>-1</button>
-          <button type="button" className="counter" onClick={() => setCount(c => c + 1)}>
+          <button type="button" className="counter" onClick={() => updateCount(-5)}>-5</button>
+          <button type="button" className="counter" onClick={() => updateCount(-1)}>-1</button>
+          <button type="button" className="counter" onClick={() => updateCount(1)}>
             Count is {count} <Badge count={count} />
           </button>
-          <button type="button" className="counter" onClick={() => setCount(c => c + 5)}>+5</button>
-          <button type="button" className="counter" onClick={() => setCount(0)}>Reset</button>
+          <button type="button" className="counter" onClick={() => updateCount(5)}>+5</button>
+          <button type="button" className="counter" onClick={() => { setCount(0); setHistory([]); setToast('Counter reset!') }}>Reset</button>
         </div>
       </section>
 
@@ -128,6 +140,7 @@ function App() {
       <Footer />
       <ThemeToggle />
       <ScrollToTop />
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </>
   )
 }
