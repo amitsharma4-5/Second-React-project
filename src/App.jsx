@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useLocalStorage } from './hooks/useLocalStorage'
+import { useToggle } from './hooks/useToggle'
+import { usePrevious } from './hooks/usePrevious'
+import { getCountLabel } from './utils/helpers'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -11,12 +14,16 @@ import ProgressBar from './components/ProgressBar'
 import ScrollToTop from './components/ScrollToTop'
 import Toast from './components/Toast'
 import CounterHistory from './components/CounterHistory'
+import Modal from './components/Modal'
+import Tooltip from './components/Tooltip'
 import './App.css'
 
 function App() {
   const [count, setCount] = useLocalStorage('click-count', 0)
   const [history, setHistory] = useState([])
   const [toast, setToast] = useState(null)
+  const [showModal, toggleModal] = useToggle(false)
+  const prevCount = usePrevious(count)
 
   const updateCount = (delta) => {
     setCount(c => c + delta)
@@ -35,9 +42,10 @@ function App() {
         </div>
         <div>
           <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+          <p style={{ color: 'var(--accent)', fontWeight: 500 }}>{getCountLabel(count)}</p>
+          {prevCount !== undefined && prevCount !== count && (
+            <p style={{ fontSize: '13px', color: 'var(--text)' }}>Previous: {prevCount}</p>
+          )}
         </div>
         <ProgressBar count={count} max={100} />
         <CounterHistory history={history} />
@@ -49,6 +57,7 @@ function App() {
           </button>
           <button type="button" className="counter" onClick={() => updateCount(5)}>+5</button>
           <button type="button" className="counter" onClick={() => { setCount(0); setHistory([]); setToast('Counter reset!') }}>Reset</button>
+          <Tooltip text="View stats"><button type="button" className="counter" onClick={toggleModal}>📊</button></Tooltip>
         </div>
       </section>
 
@@ -141,6 +150,13 @@ function App() {
       <ThemeToggle />
       <ScrollToTop />
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+      {showModal && (
+        <Modal title="Counter Stats" onClose={toggleModal}>
+          <p>Current: <strong>{count}</strong></p>
+          <p>Previous: <strong>{prevCount ?? '—'}</strong></p>
+          <p>Total actions: <strong>{history.length}</strong></p>
+        </Modal>
+      )}
     </>
   )
 }
